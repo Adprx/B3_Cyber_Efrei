@@ -29,12 +29,8 @@ le groupe wheel est déjà dans la conf sudo pour autoriser ses membres à utili
 avec un cat TRUC | grep TRUC je veux voir que la bonne ligne
 
 ```bash
-[neird4@vbox ~]$ cat /etc/sudoers | grep wheel                            
-cat: /etc/sudoers: Permission non accordée
-[neird4@vbox ~]$ sudo !!
+[neird4@vbox ~]$ sudo cat /etc/sudoers | grep wheel    
 sudo cat /etc/sudoers | grep wheel
-[sudo] Mot de passe de neird4 : 
-Désolé, essayez de nouveau.
 [sudo] Mot de passe de neird4 : 
 ## Allows people in group wheel to run all commands
 %wheel	ALL=(ALL)	ALL
