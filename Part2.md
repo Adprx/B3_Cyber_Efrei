@@ -8,15 +8,7 @@
 je vous file les instructions pour la définition de l'IP dans la VM, avec Rocky Linux on peut faire comme ça pour la définition d'une IP statique :
 
 ```bash
-[neird4@vbox network-scripts]$ sudo cat ifcfg-enp0s8
-DEVICE=enp0s8
-NAME=lan
 
-BOOTPROTO=static
-ONBOOT=yes
-
-IPADDR=10.1.1.11
-NETMASK=255.255.255.0
 [neird4@vbox network-scripts]$ sudo cat ifcfg-enp0s8
 DEVICE=enp0s8
 NAME=lan
@@ -78,6 +70,7 @@ Transient hostname: node1.tp1.b3
 2. Listening ports
 
 🌞 Déterminer la liste des programmes qui écoutent sur un port TCP
+🌞 Déterminer la liste des programmes qui écoutent sur un port UDP
 
 ```bash
 [neird4@vbox network-scripts]$ sudo ss -tulnp
@@ -89,4 +82,7 @@ tcp          LISTEN        0             128                        0.0.0.0:22  
 tcp          LISTEN        0             128                           [::]:22                         [::]:*           users:(("sshd",pid=729,fd=4))
 ``` 
 
-🌞 Déterminer la liste des programmes qui écoutent sur un port UDP
+3. Firewalling
+➜ Vous pouvez afficher l'état actuel de firewalld, le firewall de Rocky Linux, avec :
+
+sudo firewall-cmd --list-all
