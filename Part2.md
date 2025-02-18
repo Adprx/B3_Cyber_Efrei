@@ -85,4 +85,80 @@ tcp          LISTEN        0             128                           [::]:22  
 3. Firewalling
 ➜ Vous pouvez afficher l'état actuel de firewalld, le firewall de Rocky Linux, avec :
 
-sudo firewall-cmd --list-all
+🌞 Pour chacun des ports précédemment repérés...
+
+montrez qu'il existe une règle firewall qui autorise le trafic entrant sur ce port
+ou pas ?
+
+```bash
+[neird4@vbox ~]$ sudo firewall-cmd --list-all                                   
+[sudo] password for neird4: 
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: enp0s3 enp0s8
+  sources: 
+  services: cockpit dhcpv6-client ssh
+  ports: 
+  protocols: 
+  forward: yes
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules:
+```
+
+```bash
+[neird4@vbox ~]$ sudo firewall-cmd --list-services
+cockpit dhcpv6-client ssh
+```
+
+```bash
+[neird4@vbox ~]$ sudo cat /etc/services | grep dhcpv6-clien
+dhcpv6-client   546/tcp
+dhcpv6-client   546/udp
+[neird4@vbox ~]$ sudo cat /etc/services | grep ssh         
+ssh             22/tcp                          # The Secure Shell (SSH) Protocol
+ssh             22/udp                          # The Secure Shell (SSH) Protocol
+x11-ssh-offset  6010/tcp                        # SSH X11 forwarding offset
+ssh             22/sctp                 # SSH
+[neird4@vbox ~]$ sudo cat /etc/services | grep cockpit
+[neird4@vbox ~]$ 
+```
+
+🌞 Fermez tous les ports inutilement ouverts dans le firewall
+
+principe du moindre privilège encore et encore !
+pas besoin qu'un port soit ouvert si aucun service n'écoute dessus
+
+```bash
+[neird4@vbox ~]$ sudo firewall-cmd --remove-service=cockpit --permanent         
+success
+[neird4@vbox ~]$ sudo firewall-cmd --remove-service=ssh --permanent    
+success
+[neird4@vbox ~]$ sudo firewall-cmd --remove-service=dhcpv6-client --permanent
+success
+[neird4@vbox ~]$ sudo firewall-cmd --reload                                  
+success
+[neird4@vbox ~]$ sudo firewall-cmd --list-all                                
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: enp0s3 enp0s8
+  sources: 
+  services: 
+  ports: 
+  protocols: 
+  forward: yes
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+```
+
+🌞 Pour toutes les applications qui sont en écoute sur TOUTES les adresses IP
+
+dans Linux, ce sont les applications qui écoutent sur la pseudo-adresse IP 0.0.0.0 : ça signifie que toutes les adresses IP de la machine sont concernées
+modifier la configuration de l'application pour n'écouter que une seule IP : celle qui est nécessaire
